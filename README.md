@@ -28,20 +28,20 @@ Backup-Software/
 └── LICENSE              # MIT License
 ```
 
-> Compiled `.exe` files are available under [Releases](../../releases).
+> To use the software, build from source using the instructions below.
 
 ---
 
 ## ⚙️ How It Works
 
-1. **Configuration** — Run `set parameters.exe` (or `set parameters.py`) to set:
+1. **Configuration** — Run `set parameters.py` to set:
    - Source folder to back up
    - Destination folder for backups
    - Daily backup time (hour : minute : second)
 
    Settings are saved to a local `info.txt` file used by the backup engine.
 
-2. **Backup Engine** — `Backup Software.exe` runs continuously in the background:
+2. **Backup Engine** — compile and run `Backup Software.c`:
    - Calculates the exact number of seconds until the configured backup time and calls `sleep()` for precisely that duration — **zero CPU usage while waiting**
    - On the first run: performs a **full backup** of the source folder into a new timestamped subfolder (`/CFR DD-MM-YYYY`)
    - On subsequent runs: performs an **incremental backup**, copying only files modified since the last backup date
@@ -53,44 +53,35 @@ Backup-Software/
 
 ## 🚀 Getting Started
 
-### Download
-
-Download the latest precompiled `.exe` files from the [Releases](../../releases) page — no installation needed.
-
 ### Prerequisites
 
 - **Windows OS** (the backup engine uses Windows APIs — `CreateFile`, `SetFileTime`, `windows.h`)
-- **Python 3.x** — only if running `set parameters.py` directly (instead of the `.exe`)
+- **GCC with MinGW** — to compile the backup engine (e.g., via [MSYS2](https://www.msys2.org/))
+- **Python 3.x** — to run the configuration GUI
   - Required library: `tkinter` (included with standard Python on Windows)
 
-### Usage
+### Build & Run
 
-1. Download both `.exe` files from the [Releases](../../releases) page and place them in the same folder.
-2. Run **`set parameters.exe`** to open the configuration GUI.
-3. Select your **Source Path** and **Destination Path** using the folder browser.
-4. Set your preferred **backup time** using the dropdowns.
-5. Click **Set** — the backup engine will launch automatically.
-6. Keep **`Backup Software.exe`** running in the background. It will back up your files daily at the configured time.
-
-> **Note:** Both `.exe` files must be kept in the same folder. `info.txt` is auto-created there on first run.
-
----
-
-## 🛠️ Building from Source
-
-To recompile the backup engine from `Backup Software.c`:
+**Step 1 — Compile the backup engine:**
 
 ```bash
 gcc "Backup Software.c" -o "Backup Software.exe" -lwindows
 ```
 
-> Requires GCC with MinGW on Windows (e.g., via [MSYS2](https://www.msys2.org/)).
-
-To run the configuration GUI without the compiled exe:
+**Step 2 — Run the configuration GUI:**
 
 ```bash
 python "set parameters.py"
 ```
+
+**Step 3 — Configure your backup:**
+
+1. Select your **Source Path** and **Destination Path** using the folder browser.
+2. Set your preferred **backup time** using the dropdowns.
+3. Click **Set** — the backup engine will launch automatically.
+4. Keep **`Backup Software.exe`** running in the background. It will back up your files daily at the configured time.
+
+> **Note:** Both files must be in the same folder. `info.txt` is auto-created there on first run.
 
 ---
 
